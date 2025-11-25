@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #FFF5F7; /* 淺粉色背景 */
+  color: #4A4A4A;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 隱藏捲軸但保留功能 */
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
