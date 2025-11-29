@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MapPin, Navigation, Calendar, Cloud, Sun, CloudSnow, Wind, Utensils, Camera, Train, Plane, Home, Phone, Wallet, Info, Snowflake, ArrowRight, Plus, Trash2, RefreshCw } from 'lucide-react';
+import { MapPin, Navigation, Calendar, Cloud, ChevronDown, Sun, CloudSnow, Wind, Utensils, Camera, Train, Plane, Home, Phone, Wallet, Info, Snowflake, ArrowRight, Plus, Trash2, RefreshCw } from 'lucide-react';
 
 // --- 1. 地點座標 (用於即時天氣 API) ---
 const LOCATIONS = {
@@ -302,7 +302,75 @@ const ActivityCard = ({ act }) => {
   );
 };
 
-// --- 4. 主程式 ---
+// --- 4. 每天行程卡片 (新增組件) ---
+const DayCard = ({ day }) => {
+  // 1. 使用 State 追蹤卡片是否展開
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  // 2. 處理點擊事件：切換 isExpanded 的狀態
+  const toggleExpand = () => {
+    setIsExpanded(!isExpanded);
+  };
+
+  return (
+    // 外層容器，設定圓角和陰影
+    <div className="bg-white rounded-3xl shadow-lg border border-pink-100 overflow-hidden transition-all duration-300">
+      
+      {/* 卡片頭部 (永遠顯示) - 點擊區域 */}
+      <div 
+        className={`p-5 cursor-pointer flex justify-between items-center transition-colors ${isExpanded ? 'bg-pink-100/50' : 'hover:bg-pink-50'}`}
+        onClick={toggleExpand}
+      >
+        <div className="flex items-start gap-4">
+          <div className="text-center min-w-[70px]">
+            {/* 核心資訊：Day 1 */}
+            <div className="text-3xl font-black text-gray-800 font-mono tracking-tighter">Day {day.day}</div>
+            {/* 核心資訊：日期 */}
+            <div className="text-sm font-bold text-pink-500">{day.date}</div>
+          </div>
+          
+          <div>
+            {/* 核心資訊：行程標題 */}
+            <h3 className="text-lg font-black text-gray-800 leading-tight">{day.title}</h3>
+            {/* 核心資訊：城市 */}
+            <p className="text-sm text-gray-500 flex items-center gap-1 mt-1">
+                <MapPin size={14} className="text-pink-400"/>
+                {day.city}
+            </p>
+          </div>
+        </div>
+        
+        <div className="flex flex-col items-end gap-2 min-w-[120px]">
+            {/* 天氣小工具 */}
+            <WeatherWidget city={day.city} />
+
+            {/* 展開/收起圖標 */}
+            <ChevronDown 
+              size={20} 
+              className={`text-gray-500 transition-transform duration-300 ${isExpanded ? 'transform rotate-180 text-pink-500' : ''}`}
+            />
+        </div>
+      </div>
+
+      {/* 卡片內容 (根據 isExpanded 狀態顯示/隱藏) */}
+      <div className={`transition-all duration-300 ease-in-out ${isExpanded ? 'max-h-[3000px] opacity-100 p-4' : 'max-h-0 opacity-0 overflow-hidden p-0'}`}>
+        {/* 只有展開時才顯示內容和 padding */}
+        {isExpanded && (
+          <div className="pt-4 border-t border-pink-100">
+            <h4 className="text-md font-bold text-gray-700 mb-3 ml-2">今日行程 ({day.events.length} 項活動)</h4>
+            <div className="space-y-3">
+              {day.events.map((act, i) => (
+                <ActivityCard key={i} act={act} />
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// --- 5. 主程式 ---
 export default function App() {
   const [tab, setTab] = useState('trip'); // trip, info, budget
   const [expenses, setExpenses] = useState([]);
@@ -339,24 +407,9 @@ export default function App() {
         {/* --- TAB 1: 行程 (Trip) --- */}
         {tab === 'trip' && (
           <div className="space-y-8 animate-fadeIn">
+            {/* **改變在這裡：直接使用新的 DayCard 組件** */}
             {tripData.map((day) => (
-              <div key={day.day}>
-                {/* 日期標題與天氣 */}
-                <div className="flex justify-between items-end mb-4 px-1">
-                  <div>
-                    <div className="text-3xl font-black text-gray-800 font-mono tracking-tighter">Day {day.day}</div>
-                    <div className="text-sm font-bold text-pink-500">{day.date}</div>
-                  </div>
-                  <WeatherWidget city={day.city} />
-                </div>
-                
-                {/* 行程卡片列表 */}
-                <div className="space-y-3">
-                  {day.activities.map((act, i) => (
-                    <ActivityCard key={i} act={act} />
-                  ))}
-                </div>
-              </div>
+              <DayCard key={day.day} day={day} />
             ))}
           </div>
         )}
