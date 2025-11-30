@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MapPin, Navigation, Calendar, Cloud, ChevronDown, Sun, CloudSnow, Wind, Utensils, Camera, Train, Plane, Home, Phone, Wallet, Info, Snowflake, ArrowRight, Plus, Trash2, RefreshCw } from 'lucide-react';
+import { MapPin, Navigation, Calendar, Cloud, Sun, CloudSnow, ChevronDown, Wind, Utensils, Camera, Train, Plane, Home, Phone, Wallet, Info, Snowflake, ArrowRight, Plus, Trash2, RefreshCw } from 'lucide-react';
 
 // --- 1. 地點座標 (用於即時天氣 API) ---
 const LOCATIONS = {
@@ -404,7 +404,8 @@ export default function App() {
 
       {/* Content */}
       <main className="p-4">
-        {/* --- TAB 1: 行程 (Trip) --- */}
+        
+       {/* --- TAB 1: 行程 (Trip) --- */}
         {tab === 'trip' && (
           <div className="space-y-8 animate-fadeIn">
             {/* **改變在這裡：直接使用新的 DayCard 組件** */}
