@@ -18,7 +18,7 @@ const tripData = [
     date: "2/14 (六)",
     city: "Helsinki", // 用於天氣對應
     title: "香港 -> 赫爾辛基 -> 羅瓦涅米",
-    activities: [
+    events: [
       { type: "transport", time: "14:05", title: "抵達赫爾辛基 (HEL)", desc: "抵達機場，準備轉機。", location: "Helsinki Airport" },
       { type: "rest", time: "16:00", title: "Taobao Lounge 休息", desc: "HKD 130/人。休息充電，調整時差。", location: "Helsinki Airport Lounge" },
       { type: "flight", time: "19:40", title: "飛往羅瓦涅米 (HEL->RVN)", desc: "HKD 1,520 (已付)。21:05 抵達。", location: "Rovaniemi Airport" },
@@ -30,7 +30,7 @@ const tripData = [
     date: "2/15 (日)",
     city: "Rovaniemi",
     title: "羅瓦涅米 (分組活動)",
-    activities: [
+    events: [
       { type: "food", time: "08:30", title: "酒店早餐", desc: "吃飽飽準備出發！" },
       { type: "activity", time: "09:00", title: "【年輕人】冰瀑健行", desc: "Frozen Waterfall Hiking (USD 162/人)。GetYourGuide 預訂，含接送。", location: "Korouoma Canyon" },
       { type: "activity", time: "09:00", title: "【父母】博物館與市區", desc: "Arktikum 博物館 / 市中心散步 / 桑拿 (HKD 166-460)。", location: "Arktikum" },
@@ -43,7 +43,7 @@ const tripData = [
     date: "2/16 (一)",
     city: "Rovaniemi",
     title: "羅瓦涅米 (破冰船)",
-    activities: [
+    events: [
       { type: "transport", time: "09:45", title: "前往遊客中心", desc: "Call Uber/Bolt。前往 Tourist Information Center。" },
       { type: "activity", time: "10:00", title: "Polar Explorer 破冰船", desc: "EUR 470/人 (+30午餐)。含冰海漂浮體驗。重要：記得帶替換衣物！", location: "Polar Explorer Icebreaker" },
       { type: "food", time: "18:35", title: "晚餐 & 超市", desc: "預算約 HKD 200。" }
@@ -54,7 +54,7 @@ const tripData = [
     date: "2/17 (二)",
     city: "Rovaniemi", // 行程中移動，顯示出發地或目的地皆可
     title: "羅瓦涅米 -> 伊納里",
-    activities: [
+    events: [
       { type: "transport", time: "10:30", title: "寄放行李", desc: "K-Market Toriportti。EUR 5/件。", location: "K-Market Toriportti" },
       { type: "sight", time: "11:15", title: "聖誕老人市區辦公室", desc: "Santa Claus City Office. 免費入場。" },
       { type: "sight", time: "13:00", title: "聖誕老人村", desc: "搭車前往。跨越北極圈線！必去郵局。", location: "Santa Claus Village" },
@@ -67,7 +67,7 @@ const tripData = [
     date: "2/18 (三)",
     city: "Inari",
     title: "伊納里 (馴鹿體驗)",
-    activities: [
+    events: [
       { type: "rest", time: "10:00", title: "補眠 & 換房", desc: "準備午餐。" },
       { type: "activity", time: "13:30", title: "馴鹿雪橇", desc: "EUR 168/人。2人一台。", location: "Visit Inari" },
       { type: "aurora", time: "20:00", title: "極光狩獵 (Car)", desc: "EUR 169/人。4小時車程追光。", location: "Inari Aurora Spot" }
@@ -78,7 +78,7 @@ const tripData = [
     date: "2/19 (四)",
     city: "Inari",
     title: "伊納里 (哈士奇)",
-    activities: [
+    events: [
       { type: "activity", time: "11:30", title: "哈士奇雪橇", desc: "EUR 198/人。3小時體驗，超刺激！", location: "Visit Inari Safaris" },
       { type: "aurora", time: "20:30", title: "雪地摩托車追極光", desc: "EUR 183/人。3小時。", location: "Inari" }
     ]
@@ -88,7 +88,7 @@ const tripData = [
     date: "2/20 (五)",
     city: "Kirkenes",
     title: "Inari -> 基爾肯內斯",
-    activities: [
+    events: [
       { type: "transport", time: "08:00", title: "包車前往 Kirkenes", desc: "EUR 393/車。跨境進入挪威！", location: "Kirkenes" },
       { type: "hotel", time: "11:30", title: "Scandic Hotel", desc: "HKD 1,688/房。已付。", location: "Scandic Kirkenes" },
       { type: "activity", time: "13:00", title: "冰釣 (選購)", desc: "NOK 3100/人。Snow Hotel。", location: "Snowhotel Kirkenes" },
@@ -100,7 +100,7 @@ const tripData = [
     date: "2/21 (六)",
     city: "Kirkenes",
     title: "Kirkenes -> 特羅姆瑟",
-    activities: [
+    events: [
       { type: "transport", time: "12:30", title: "搭乘 Havila Voyages", desc: "EUR 185/人。前往 Tromsø。船上包膳食。", location: "Havila Voyages Kirkenes" }
     ]
   },
@@ -109,7 +109,7 @@ const tripData = [
     date: "2/22 (日)",
     city: "Tromsø",
     title: "郵輪 -> 特羅姆瑟",
-    activities: [
+    events: [
       { type: "transport", time: "23:45", title: "抵達 Tromsø", desc: "深夜抵達。", location: "Tromsø Terminal" },
       { type: "hotel", time: "23:55", title: "Thon Hotel Polar", desc: "HKD 2,006/房。已付。", location: "Thon Hotel Polar" }
     ]
@@ -119,7 +119,7 @@ const tripData = [
     date: "2/23 (一)",
     city: "Tromsø",
     title: "特羅姆瑟 -> 赫爾辛基",
-    activities: [
+    events: [
       { type: "flight", time: "18:45", title: "飛往赫爾辛基", desc: "HKD 1,620/人。已付。", location: "Tromsø Airport" },
       { type: "hotel", time: "22:30", title: "Scandic Helsinki Airport", desc: "HKD 1,015/房。", location: "Scandic Helsinki Airport" }
     ]
@@ -129,7 +129,7 @@ const tripData = [
     date: "2/24 (二)",
     city: "Helsinki",
     title: "赫爾辛基 -> 香港",
-    activities: [
+    events: [
       { type: "flight", time: "16:35", title: "飛返香港 (HKG)", desc: "HKD 6,600/人。回家囉！", location: "Helsinki Airport" }
     ]
   }
@@ -277,18 +277,20 @@ const ActivityCard = ({ act }) => {
   if (act.type === 'transport') { Icon = Train; style = "border-l-4 border-green-400 bg-green-50"; }
 
   const handleNav = () => {
-    const query = act.location || act.title;
-    window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`, '_blank');
+    const query = act.nav || act.title; // 用 act.nav 優先
+    if (query) {
+      window.open(`http://googleusercontent.com/maps.google.com/search?api=1&query=${encodeURIComponent(query)}`, '_blank');
+    }
   };
 
-  return (
+ return (
     <div className={`p-4 mb-3 rounded-2xl shadow-sm ${style} relative transition-all active:scale-[0.98]`}>
       <div className="flex justify-between items-start mb-1">
         <div className="flex items-center gap-2">
           <span className="bg-white/90 px-2 py-0.5 rounded-md text-xs font-black text-gray-500 shadow-sm font-mono">{act.time}</span>
           <Icon size={16} className="text-gray-600 opacity-70" />
         </div>
-        {act.location && (
+        {act.nav && ( 
           <button onClick={handleNav} className="flex items-center gap-1 bg-blue-500 text-white px-2.5 py-1 rounded-full text-[10px] font-bold shadow hover:bg-blue-600">
             <Navigation size={10} /> GO
           </button>
@@ -553,3 +555,4 @@ export default function App() {
     </div>
   );
 }
+
