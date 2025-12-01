@@ -66,7 +66,7 @@ const tripData = [
     day: 5,
     date: "2/18 (三)",
     city: "Inari",
-    title: "伊納里 (馴鹿體驗)",
+    title: "伊納里 (鹿鹿！)",
     events: [
       { type: "rest", time: "10:00", title: "補眠 & 換房", desc: "準備午餐。" },
       { type: "activity", time: "13:30", title: "馴鹿雪橇", desc: "EUR 168/人。2人一台。", location: "Visit Inari" },
@@ -77,7 +77,7 @@ const tripData = [
     day: 6,
     date: "2/19 (四)",
     city: "Inari",
-    title: "伊納里 (哈士奇)",
+    title: "伊納里 (哈士奇！)",
     events: [
       { type: "activity", time: "11:30", title: "哈士奇雪橇", desc: "EUR 198/人。3小時體驗，超刺激！", location: "Visit Inari Safaris" },
       { type: "aurora", time: "20:30", title: "雪地摩托車追極光", desc: "EUR 183/人。3小時。", location: "Inari" }
@@ -87,7 +87,7 @@ const tripData = [
     day: 7,
     date: "2/20 (五)",
     city: "Kirkenes",
-    title: "Inari -> 基爾肯內斯",
+    title: "伊納里 -> 基爾肯內斯",
     events: [
       { type: "transport", time: "08:00", title: "包車前往 Kirkenes", desc: "EUR 393/車。跨境進入挪威！", location: "Kirkenes" },
       { type: "hotel", time: "11:30", title: "Scandic Hotel", desc: "HKD 1,688/房。已付。", location: "Scandic Kirkenes" },
@@ -99,7 +99,7 @@ const tripData = [
     day: 8,
     date: "2/21 (六)",
     city: "Kirkenes",
-    title: "Kirkenes -> 特羅姆瑟",
+    title: "基爾肯內斯 -> 郵輪",
     events: [
       { type: "transport", time: "12:30", title: "搭乘 Havila Voyages", desc: "EUR 185/人。前往 Tromsø。船上包膳食。", location: "Havila Voyages Kirkenes" }
     ]
@@ -333,7 +333,7 @@ const DayCard = ({ day }) => {
           
           <div>
             {/* 核心資訊：行程標題 */}
-            <h3 className="text-lg font-black text-gray-800 leading-tight">{day.title}</h3>
+            <h3 className="text-lg font-black text-gray-800 leading-tight line-clamp-3">{day.title}</h3>
             {/* 核心資訊：城市 */}
             <p className="text-sm text-gray-500 flex items-center gap-1 mt-1">
                 <MapPin size={14} className="text-pink-400"/>
@@ -555,4 +555,5 @@ export default function App() {
     </div>
   );
 }
+
 
