@@ -208,25 +208,27 @@ const CurrencyConverter = () => {
   const [loading, setLoading] = useState(true);
 
   // 自動抓取最新匯率
-  useEffect(() => {
+    useEffect(() => {
     const fetchRates = async () => {
       try {
-        // 使用 frankfurter API 抓取 HKD 對 AUD 和 USD 的匯率
-        // 因為我們要算 "1 外幣 = ? HKD"，所以我們查 HKD 的匯率再倒過來算，或者直接查 AUD/USD 對 HKD
-        const res = await fetch('https://api.frankfurter.app/latest?from=HKD&to=AUD,USD');
+        // 1. 用歐元做基準查港幣 (因為 EUR 數據最全)
+        const res = await fetch('https://api.frankfurter.app/latest?from=EUR&to=HKD,NOK,USD');
         const data = await res.json();
         
-        // API 回傳的是 1 HKD = ? AUD (例如 0.19)，我們要反過來算 1 AUD = ? HKD (1 / 0.19)
         if (data && data.rates) {
+          const eurToHkd = data.rates.HKD; // 1 EUR = ? HKD (e.g. 8.2)
+          const eurToNok = data.rates.NOK; // 1 EUR = ? NOK
+          const eurToUsd = data.rates.USD; // 1 EUR = ? USD
+
+          // 2. 數學換算：計返每一種幣值幾多港紙
           setRates({
-            EUR: (1 / data.rates.EUR).toFixed(2),
-            NOK: (1 / data.rates.NOK).toFixed(2),
-            USD: (1 / data.rates.USD).toFixed(2)
+            EUR: eurToHkd.toFixed(2),
+            NOK: (eurToHkd / eurToNok).toFixed(2),
+            USD: (eurToHkd / eurToUsd).toFixed(2)
           });
         }
       } catch (e) {
-        console.error("Rate fetch failed", e);
-        // 失敗時保持預設值，不影響使用
+        console.log("用預設匯率");
       } finally {
         setLoading(false);
       }
@@ -276,7 +278,7 @@ const CurrencyConverter = () => {
       </div>
       
       <p className="text-[10px] text-center text-gray-400">
-        當前匯率：1 {currency} ≈ {rate} HKD
+        當前匯率：1 {currency} ≈ {rate|| '-'} HKD
       </p>
     </div>
   );
@@ -599,6 +601,7 @@ export default function App() {
     </div>
   );
 }
+
 
 
 
