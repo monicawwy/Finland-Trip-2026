@@ -19,10 +19,10 @@ const tripData = [
     city: "Helsinki", // 用於天氣對應
     title: "香港 -> 赫爾辛基 -> 羅瓦涅米",
     events: [
-      { type: "transport", time: "14:05", title: "抵達赫爾辛基 (HEL)", desc: "抵達機場，準備轉機。", location: "Helsinki Airport" },
-      { type: "rest", time: "16:00", title: "Taobao Lounge 休息", desc: "HKD 130/人。休息充電，調整時差。", location: "Helsinki Airport Lounge" },
-      { type: "flight", time: "19:40", title: "飛往羅瓦涅米 (HEL->RVN)", desc: "HKD 1,520 (已付)。21:05 抵達。", location: "Rovaniemi Airport" },
-      { type: "hotel", time: "22:00", title: "Arctic Resort Delight", desc: "已付。3房/3晚。可在附近散步適應天氣。", location: "Arctic Resort Delight" }
+      { type: "transport", time: "14:05", title: "抵達赫爾辛基 (HEL)", desc: "抵達機場，準備轉機。", nav: "Helsinki Airport" },
+      { type: "rest", time: "16:00", title: "Taobao Lounge 休息", desc: "HKD 130/人。休息充電，調整時差。", nav: "Helsinki Airport Lounge" },
+      { type: "flight", time: "19:40", title: "飛往羅瓦涅米 (HEL->RVN)", desc: "HKD 1,520 (已付)。21:05 抵達。", nav: "Rovaniemi Airport" },
+      { type: "hotel", time: "22:00", title: "Arctic Resort Delight", desc: "已付。3房/3晚。可在附近散步適應天氣。", nav: "Arctic Resort Delight" }
     ]
   },
   {
@@ -32,10 +32,10 @@ const tripData = [
     title: "羅瓦涅米 (分組活動)",
     events: [
       { type: "food", time: "08:30", title: "酒店早餐", desc: "吃飽飽準備出發！" },
-      { type: "activity", time: "09:00", title: "【年輕人】冰瀑健行", desc: "Frozen Waterfall Hiking (USD 162/人)。GetYourGuide 預訂，含接送。", location: "Korouoma Canyon" },
-      { type: "activity", time: "09:00", title: "【父母】博物館與市區", desc: "Arktikum 博物館 / 市中心散步 / 桑拿 (HKD 166-460)。", location: "Arktikum" },
-      { type: "food", time: "18:00", title: "晚餐 & 超市採買", desc: "預算約 HKD 200。補給零食飲料。", location: "K-Citymarket Rovaniemi" },
-      { type: "aurora", time: "晚上", title: "追極光 (視天氣)", desc: "免費在酒店附近觀賞，或參加 Tour。", location: "Arctic Resort Delight" }
+      { type: "activity", time: "09:00", title: "【年輕人】冰瀑健行", desc: "Frozen Waterfall Hiking (USD 162/人)。GetYourGuide 預訂，含接送。", nav: "Korouoma Canyon" },
+      { type: "activity", time: "09:00", title: "【父母】博物館與市區", desc: "Arktikum 博物館 / 市中心散步 / 桑拿 (HKD 166-460)。", nav: "Arktikum" },
+      { type: "food", time: "18:00", title: "晚餐 & 超市採買", desc: "預算約 HKD 200。補給零食飲料。", nav: "K-Citymarket Rovaniemi" },
+      { type: "aurora", time: "晚上", title: "追極光 (視天氣)", desc: "免費在酒店附近觀賞，或參加 Tour。", nav: "Arctic Resort Delight" }
     ]
   },
   {
@@ -44,9 +44,10 @@ const tripData = [
     city: "Rovaniemi",
     title: "羅瓦涅米 (破冰船)",
     events: [
-      { type: "transport", time: "09:45", title: "前往遊客中心", desc: "Call Uber/Bolt。前往 Tourist Information Center。" },
-      { type: "activity", time: "10:00", title: "Polar Explorer 破冰船", desc: "EUR 470/人 (+30午餐)。含冰海漂浮體驗。重要：記得帶替換衣物！", location: "Polar Explorer Icebreaker" },
+      { type: "transport", time: "09:45", title: "前往破冰船集合地點", desc: "Call Uber/Bolt。前往 Polar Explorer Icebreaker cruise office。", nav: "Polar Explorer Icebreaker cruise office" },
+      { type: "activity", time: "10:00", title: "Polar Explorer 破冰船", desc: "EUR 470/人 (+30午餐)。含冰海漂浮體驗。重要：記得帶替換衣物！", nav: "Polar Explorer Icebreaker" },
       { type: "food", time: "18:35", title: "晚餐 & 超市", desc: "預算約 HKD 200。" }
+      { type: "aurora", time: "晚上", title: "追極光 (視天氣)", desc: "免費在酒店附近觀賞，或參加 Tour。", nav: "Arctic Resort Delight" }
     ]
   },
   {
@@ -55,11 +56,11 @@ const tripData = [
     city: "Rovaniemi", // 行程中移動，顯示出發地或目的地皆可
     title: "羅瓦涅米 -> 伊納里",
     events: [
-      { type: "transport", time: "10:30", title: "寄放行李", desc: "K-Market Toriportti。EUR 5/件。", location: "K-Market Toriportti" },
-      { type: "sight", time: "11:15", title: "聖誕老人市區辦公室", desc: "Santa Claus City Office. 免費入場。" },
-      { type: "sight", time: "13:00", title: "聖誕老人村", desc: "搭車前往。跨越北極圈線！必去郵局。", location: "Santa Claus Village" },
-      { type: "transport", time: "17:20", title: "巴士前往 Inari", desc: "EUR 63.2/人。約 4.5 小時車程。", location: "Rovaniemi Bus Station" },
-      { type: "hotel", time: "22:00", title: "Panorama Cabin", desc: "Sauna Suite。已付，3晚。極光熱點！", location: "Panorama Cabin Inari" }
+      { type: "transport", time: "10:30", title: "寄放行李", desc: "K-Market Toriportti；EUR 5/件。", nav: "K-Market Toriportti" },
+      { type: "sight", time: "11:15", title: "聖誕老人市區辦公室", desc: "Santa Claus City Office. 免費入場。", nav: "Santa Claus City Office" },
+      { type: "sight", time: "13:00", title: "聖誕老人村", desc: "搭車前往。跨越北極圈線！必去郵局。", nav: "Santa Claus Village" },
+      { type: "transport", time: "17:20", title: "巴士前往 Inari", desc: "EUR 63.2/人。約 4.5 小時車程。", nav: "Rovaniemi Bus Station" },
+      { type: "hotel", time: "22:00", title: "Panorama Cabin", desc: "Sauna Suite。已付，3晚。極光熱點！", nav: "Panorama Cabin Inari" }
     ]
   },
   {
@@ -68,9 +69,9 @@ const tripData = [
     city: "Inari",
     title: "伊納里 (鹿鹿！)",
     events: [
-      { type: "rest", time: "10:00", title: "補眠 & 換房", desc: "準備午餐。" },
-      { type: "activity", time: "13:30", title: "馴鹿雪橇", desc: "EUR 168/人。2人一台。", location: "Visit Inari" },
-      { type: "aurora", time: "20:00", title: "極光狩獵 (Car)", desc: "EUR 169/人。4小時車程追光。", location: "Inari Aurora Spot" }
+      { type: "rest", time: "10:00", title: "補眠 & 換房", desc: "準備午餐。", nav: "Panorama Cabin Inari" },
+      { type: "activity", time: "13:30", title: "馴鹿雪橇", desc: "EUR 168/人。2人一台。", nav: "Visit Inari" },
+      { type: "aurora", time: "20:00", title: "極光狩獵 (Car)", desc: "EUR 169/人。4小時車程追光。", nav: "Inari Aurora Spot" }
     ]
   },
   {
@@ -79,8 +80,8 @@ const tripData = [
     city: "Inari",
     title: "伊納里 (哈士奇！)",
     events: [
-      { type: "activity", time: "11:30", title: "哈士奇雪橇", desc: "EUR 198/人。3小時體驗，超刺激！", location: "Visit Inari Safaris" },
-      { type: "aurora", time: "20:30", title: "雪地摩托車追極光", desc: "EUR 183/人。3小時。", location: "Inari" }
+      { type: "activity", time: "11:30", title: "哈士奇雪橇", desc: "EUR 198/人。3小時體驗，超刺激！", nav: "Visit Inari Safaris" },
+      { type: "aurora", time: "20:30", title: "雪地摩托車追極光", desc: "EUR 183/人。3小時。", nav: "Visit Inari" }
     ]
   },
   {
@@ -89,10 +90,10 @@ const tripData = [
     city: "Kirkenes",
     title: "伊納里 -> 基爾肯內斯",
     events: [
-      { type: "transport", time: "08:00", title: "包車前往 Kirkenes", desc: "EUR 393/車。跨境進入挪威！", location: "Kirkenes" },
-      { type: "hotel", time: "11:30", title: "Scandic Hotel", desc: "HKD 1,688/房。已付。", location: "Scandic Kirkenes" },
-      { type: "activity", time: "13:00", title: "冰釣 (選購)", desc: "NOK 3100/人。Snow Hotel。", location: "Snowhotel Kirkenes" },
-      { type: "food", time: "18:00", title: "帝王蟹吃到飽", desc: "NOK 2800/人。必吃行程！", location: "Kirkenes King Crab Safari" }
+      { type: "transport", time: "08:00", title: "包車前往 Kirkenes", desc: "EUR 393/車。跨境進入挪威！", nav: "Kirkenes" },
+      { type: "hotel", time: "11:30", title: "Scandic Hotel", desc: "HKD 1,688/房；已付。", nav: "Scandic Kirkenes" },
+      { type: "activity", time: "13:00", title: "冰釣 (選購)", desc: "NOK 3100/人；Snow Hotel。", nav: "Snowhotel Kirkenes" },
+      { type: "food", time: "18:00", title: "帝王蟹吃到飽", desc: "NOK 2800/人。必吃行程！", nav: "Kirkenes King Crab Safari" }
     ]
   },
   {
@@ -101,7 +102,7 @@ const tripData = [
     city: "Kirkenes",
     title: "基爾肯內斯 -> 郵輪",
     events: [
-      { type: "transport", time: "12:30", title: "搭乘 Havila Voyages", desc: "EUR 185/人。前往 Tromsø。船上包膳食。", location: "Havila Voyages Kirkenes" }
+      { type: "transport", time: "12:30", title: "搭乘 Havila Voyages", desc: "EUR 185/人。前往 Tromsø。船上包膳食。", nav: "Havila Voyages Kirkenes" }
     ]
   },
   {
@@ -110,8 +111,8 @@ const tripData = [
     city: "Tromsø",
     title: "郵輪 -> 特羅姆瑟",
     events: [
-      { type: "transport", time: "23:45", title: "抵達 Tromsø", desc: "深夜抵達。", location: "Tromsø Terminal" },
-      { type: "hotel", time: "23:55", title: "Thon Hotel Polar", desc: "HKD 2,006/房。已付。", location: "Thon Hotel Polar" }
+      { type: "transport", time: "23:45", title: "抵達 Tromsø", desc: "深夜抵達。", nav: "Tromsø Terminal" },
+      { type: "hotel", time: "23:55", title: "Thon Hotel Polar", desc: "HKD 2,006/房。已付。", nav: "Thon Hotel Polar" }
     ]
   },
   {
@@ -120,8 +121,8 @@ const tripData = [
     city: "Tromsø",
     title: "特羅姆瑟 -> 赫爾辛基",
     events: [
-      { type: "flight", time: "18:45", title: "飛往赫爾辛基", desc: "HKD 1,620/人。已付。", location: "Tromsø Airport" },
-      { type: "hotel", time: "22:30", title: "Scandic Helsinki Airport", desc: "HKD 1,015/房。", location: "Scandic Helsinki Airport" }
+      { type: "flight", time: "18:45", title: "飛往赫爾辛基", desc: "HKD 1,620/人。已付。", nav: "Tromsø Airport" },
+      { type: "hotel", time: "22:30", title: "Scandic Helsinki Airport", desc: "HKD 1,015/房。", nav: "Scandic Helsinki Airport" }
     ]
   },
   {
@@ -130,7 +131,7 @@ const tripData = [
     city: "Helsinki",
     title: "赫爾辛基 -> 香港",
     events: [
-      { type: "flight", time: "16:35", title: "飛返香港 (HKG)", desc: "HKD 6,600/人。回家囉！", location: "Helsinki Airport" }
+      { type: "flight", time: "16:35", title: "飛返香港 (HKG)", desc: "HKD 6,600/人。回家囉！", nav: "Helsinki Airport" }
     ]
   }
 ];
@@ -559,6 +560,7 @@ export default function App() {
     </div>
   );
 }
+
 
 
 
