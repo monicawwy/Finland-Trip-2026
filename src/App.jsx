@@ -331,7 +331,7 @@ const DayCard = ({ day }) => {
             <div className="text-sm font-bold text-pink-500">{day.date}</div>
           </div>
           
-          <div>
+          <div className="w-[180px]"> {/* 限制標題闊度 */}
             {/* 核心資訊：行程標題 */}
             <h3 className="text-lg font-black text-gray-800 leading-tight line-clamp-3">{day.title}</h3>
             {/* 核心資訊：城市 */}
@@ -555,6 +555,7 @@ export default function App() {
     </div>
   );
 }
+
 
 
 
