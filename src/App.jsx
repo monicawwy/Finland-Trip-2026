@@ -46,7 +46,7 @@ const tripData = [
     events: [
       { type: "transport", time: "09:45", title: "前往破冰船集合地點", desc: "Call Uber/Bolt。前往 Polar Explorer Icebreaker cruise office。", nav: "Polar Explorer Icebreaker cruise office" },
       { type: "activity", time: "10:00", title: "Polar Explorer 破冰船", desc: "EUR 470/人 (+30午餐)。含冰海漂浮體驗。重要：記得帶替換衣物！", nav: "Polar Explorer Icebreaker" },
-      { type: "food", time: "18:35", title: "晚餐 & 超市", desc: "預算約 HKD 200。" }
+      { type: "food", time: "18:35", title: "晚餐 & 超市", desc: "預算約 HKD 200。" },
       { type: "aurora", time: "晚上", title: "追極光 (視天氣)", desc: "免費在酒店附近觀賞，或參加 Tour。", nav: "Arctic Resort Delight" }
     ]
   },
@@ -599,6 +599,7 @@ export default function App() {
     </div>
   );
 }
+
 
 
 
