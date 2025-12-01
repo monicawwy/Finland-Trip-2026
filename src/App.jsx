@@ -323,7 +323,7 @@ const ActivityCard = ({ act }) => {
   const handleNav = () => {
     const query = act.nav || act.title; // 用 act.nav 優先
     if (query) {
-      window.open(`http://googleusercontent.com/maps.google.com/search?api=1&query=${encodeURIComponent(query)}`, '_blank');
+      window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`, '_blank');
     }
   };
 
@@ -599,6 +599,7 @@ export default function App() {
     </div>
   );
 }
+
 
 
 
