@@ -200,21 +200,54 @@ const WeatherWidget = ({ city }) => {
   );
 };
 
-// 匯率換算器
+// 匯率換算器 (實時版)
 const CurrencyConverter = () => {
   const [amount, setAmount] = useState('');
-  const [currency, setCurrency] = useState('EUR'); // EUR, NOK, USD
-  const RATES = { EUR: 9.2, NOK: 0.75, USD: 7.8 }; // 根據 PDF 匯率 (NOK 估算)
+  const [currency, setCurrency] = useState('EUR'); // 預設歐元
+  const [rates, setRates] = useState({ EUR: 9.2, NOK: 0.8, USD: 7.8 }); // 預設值，以防 API 失敗
+  const [loading, setLoading] = useState(true);
 
-  const result = amount ? (parseFloat(amount) * RATES[currency]).toFixed(1) : 0;
+  // 自動抓取最新匯率
+  useEffect(() => {
+    const fetchRates = async () => {
+      try {
+        // 使用 frankfurter API 抓取 HKD 對 AUD 和 USD 的匯率
+        // 因為我們要算 "1 外幣 = ? HKD"，所以我們查 HKD 的匯率再倒過來算，或者直接查 AUD/USD 對 HKD
+        const res = await fetch('https://api.frankfurter.app/latest?from=HKD&to=AUD,USD');
+        const data = await res.json();
+        
+        // API 回傳的是 1 HKD = ? AUD (例如 0.19)，我們要反過來算 1 AUD = ? HKD (1 / 0.19)
+        if (data && data.rates) {
+          setRates({
+            EUR: (1 / data.rates.EUR).toFixed(2),
+            NOK: (1 / data.rates.NOK).toFixed(2),
+            USD: (1 / data.rates.USD).toFixed(2)
+          });
+        }
+      } catch (e) {
+        console.error("Rate fetch failed", e);
+        // 失敗時保持預設值，不影響使用
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchRates();
+  }, []);
+
+  // 計算結果
+  const rate = rates[currency];
+  const result = amount ? (parseFloat(amount) * rate).toFixed(1) : 0;
 
   return (
     <div className="bg-white p-4 rounded-2xl shadow-sm border border-pink-100 mb-6">
-      <h3 className="font-bold text-gray-700 mb-3 flex items-center gap-2">
-        <RefreshCw size={18} className="text-pink-500"/> 匯率計算機
+      <h3 className="font-bold text-gray-700 mb-3 flex items-center justify-between">
+        <span className="flex items-center gap-2"><RefreshCw size={18} className="text-pink-500"/> 匯率計算機</span>
+        {loading ? <span className="text-[10px] text-gray-400 animate-pulse">更新中...</span> : <span className="text-[10px] text-green-500 bg-green-50 px-2 py-0.5 rounded-full">● 即時匯率</span>}
       </h3>
-      <div className="flex items-center gap-2 mb-3">
-        <div className="flex-1 relative">
+      
+      <div className="flex items-center gap-3 mb-3">
+        {/* 左邊：輸入與選擇 (上下排) */}
+        <div className="flex-1 flex flex-col gap-2">
           <input 
             type="number" 
             value={amount}
@@ -225,20 +258,26 @@ const CurrencyConverter = () => {
           <select 
             value={currency} 
             onChange={(e) => setCurrency(e.target.value)}
-            className="absolute right-2 top-2 bottom-2 bg-white rounded-lg border border-gray-200 text-sm font-bold px-2 text-gray-600"
+            className="w-full p-2 bg-white rounded-lg border border-gray-200 text-sm font-bold text-gray-600"
           >
-            <option value="EUR">€ EUR</option>
-            <option value="NOK">kr NOK</option>
-            <option value="USD">$ USD</option>
+            <option value="EUR">🇪🇺 歐元 (EUR)</option>
+            <option value="NOK">🇳🇴 挪威克朗 (NOK)</option>
+            <option value="USD">🇺🇸 美金 (USD)</option>
           </select>
         </div>
+
         <ArrowRight className="text-gray-300" />
-        <div className="flex-1 bg-pink-50 p-3 rounded-xl border border-pink-100 flex flex-col justify-center items-center">
+
+        {/* 右邊：結果顯示 */}
+        <div className="flex-1 bg-pink-50 p-3 rounded-xl border border-pink-100 flex flex-col justify-center items-center self-stretch">
            <span className="text-xs text-pink-400 font-bold">HKD</span>
-           <span className="font-black text-xl text-pink-600">${result}</span>
+           <span className="font-black text-2xl text-pink-600">${result}</span>
         </div>
       </div>
-      <p className="text-[10px] text-center text-gray-400">匯率：1 EUR ≈ 9.2 | 1 NOK ≈ 0.75</p>
+      
+      <p className="text-[10px] text-center text-gray-400">
+        當前匯率：1 {currency} ≈ {rate} HKD
+      </p>
     </div>
   );
 };
@@ -560,6 +599,7 @@ export default function App() {
     </div>
   );
 }
+
 
 
 
