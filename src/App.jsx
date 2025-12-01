@@ -185,7 +185,7 @@ const WeatherWidget = ({ city }) => {
         {weather?.temperature < -5 ? <Snowflake size={18} /> : (weather?.temperature > 10 ? <Sun size={18} /> : <Cloud size={18} />)}
       </div>
       <div>
-        <div className="text-[10px] uppercase text-gray-500 font-bold tracking-wider truncate w-[90px]">即時天氣 in {city}</div>
+        <div className="text-[10px] uppercase text-gray-500 font-bold tracking-wider line-clamp-2">即時天氣 In {city}</div>
         <div className="font-black text-xl text-gray-800 flex items-center gap-1">
           {weather?.temperature}°C
           {weather?.windspeed > 15 && <span className="text-[10px] bg-gray-200 px-1 rounded text-gray-600 flex items-center"><Wind size={8}/> 風大</span>}
@@ -555,6 +555,7 @@ export default function App() {
     </div>
   );
 }
+
 
 
 
