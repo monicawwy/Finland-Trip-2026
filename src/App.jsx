@@ -180,7 +180,7 @@ const WeatherWidget = ({ city }) => {
   const isCold = weather?.temperature < 0;
   
   return (
-    <div className={`flex items-center gap-3 px-4 py-2 rounded-xl shadow-sm border border-white/50 w-[140px] flex-shrink-0 ${isCold ? 'bg-gradient-to-r from-blue-50 to-blue-100' : 'bg-orange-50'}`}>
+    <div className={`flex items-center gap-3 px-4 py-2 rounded-xl shadow-sm border border-white/50 w-[120px] flex-shrink-0 ${isCold ? 'bg-gradient-to-r from-blue-50 to-blue-100' : 'bg-orange-50'}`}>
       <div className={`p-2 rounded-full ${isCold ? 'bg-blue-200 text-blue-600' : 'bg-orange-200 text-orange-600'}`}>
         {weather?.temperature < -5 ? <Snowflake size={18} /> : (weather?.temperature > 10 ? <Sun size={18} /> : <Cloud size={18} />)}
       </div>
@@ -320,7 +320,7 @@ const DayCard = ({ day }) => {
       
       {/* 卡片頭部 (永遠顯示) - 點擊區域 */}
       <div 
-        className={`p-5 cursor-pointer flex justify-between items-center transition-colors ${isExpanded ? 'bg-pink-100/50' : 'hover:bg-pink-50'}`}
+        className={`p-3 cursor-pointer flex justify-between items-center transition-colors ${isExpanded ? 'bg-pink-100/50' : 'hover:bg-pink-50'}`}
         onClick={toggleExpand}
       >
         <div className="flex items-start gap-4">
@@ -331,7 +331,7 @@ const DayCard = ({ day }) => {
             <div className="text-sm font-bold text-pink-500">{day.date}</div>
           </div>
           
-          <div className="w-[180px]"> {/* 限制標題闊度 */}
+          <div className="w-[140px]"> {/* 限制標題闊度 */}
             {/* 核心資訊：行程標題 */}
             <h3 className="text-lg font-black text-gray-800 leading-tight line-clamp-3">{day.title}</h3>
             {/* 核心資訊：城市 */}
@@ -555,6 +555,7 @@ export default function App() {
     </div>
   );
 }
+
 
 
 
