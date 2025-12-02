@@ -564,26 +564,41 @@ export default function App() {
                 <span className="text-2xl font-mono font-bold">${totalExpense}</span>
               </div>
 
-              {/* 新增輸入框 */}
-              <div className="flex gap-2 mb-4">
-                <input 
-                  type="text" 
-                  placeholder="項目 (如: 晚餐)" 
-                  value={newExpName}
-                  onChange={(e) => setNewExpName(e.target.value)}
-                  className="flex-1 p-2 rounded-xl bg-gray-50 border text-sm focus:outline-green-400"
-                />
-                <input 
-                  type="number" 
-                  placeholder="$" 
-                  value={newExpCost}
-                  onChange={(e) => setNewExpCost(e.target.value)}
-                  className="w-20 p-2 rounded-xl bg-gray-50 border text-sm focus:outline-green-400"
-                />
-                <button onClick={addExpense} className="bg-green-500 text-white p-2 rounded-xl shadow-md active:scale-95">
-                  <Plus size={20} />
-                </button>
-              </div>
+               {/* 新增輸入框 */}
+              <div className="flex items-end gap-2 mb-4 w-full"> {/* 加了 items-end (底部對齊) 和 w-full (不爆棚) */}
+  
+               {/* 項目名輸入框：改成 textarea 自動增高 */}
+               <div className="flex-1 min-w-0 relative"> {/* 加 min-w-0 這是關鍵！防止 flex 爆出去 */}
+                <textarea 
+                rows={1} // 預設 1 行高
+                placeholder="項目 (如: 晚餐)" 
+                value={newExpName}
+                onChange={(e) => {
+                setNewExpName(e.target.value);
+                // 自動調整高度的小魔法
+                e.target.style.height = 'auto'; 
+                e.target.style.height = e.target.scrollHeight + 'px';
+                }}
+                className="w-full p-2 rounded-xl bg-gray-50 border text-sm focus:outline-green-400 resize-none overflow-hidden block leading-normal" 
+               // resize-none: 不顯示手動拉大角; overflow-hidden: 隱藏捲軸; block: 消除奇怪間距
+               style={{ minHeight: '38px' }} // 設定一個最小高度，跟隔壁 input 一樣高
+              />
+            </div>
+
+              {/* 金額輸入框：保持不變，但加了 flex-shrink-0 */}
+              <input 
+              type="number" 
+              placeholder="$" 
+              value={newExpCost}
+              onChange={(e) => setNewExpCost(e.target.value)}
+              className="w-20 p-2 h-[38px] rounded-xl bg-gray-50 border text-sm focus:outline-green-400 flex-shrink-0" // 加 h-[38px] 固定高度
+              />
+
+              {/* 加號按鈕：保持不變，加 flex-shrink-0 */}
+              <button onClick={addExpense} className="bg-green-500 text-white w-[38px] h-[38px] rounded-xl shadow-md active:scale-95 flex justify-center items-center flex-shrink-0">
+              <Plus size={20} />
+              </button>
+            </div>
 
               {/* 列表 */}
               <div className="space-y-2 max-h-60 overflow-y-auto">
@@ -621,6 +636,7 @@ export default function App() {
     </div>
   );
 }
+
 
 
 
