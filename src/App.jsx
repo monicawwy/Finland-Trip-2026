@@ -187,8 +187,7 @@ const WeatherWidget = ({ city }) => {
       
       {/* 2. 上層：城市名稱 (置中) */}
       <div className="w-full text-center border-b border-black/5 pb-1 mb-1">
-        <div className="text-[10px] uppercase text-gray-500 font-bold tracking-wider truncate">
-          {city}
+        <div className="text-[10px] uppercase text-gray-500 font-bold tracking-wider line-clamp-2">{city}即時天氣
         </div>
       </div>
 
@@ -622,6 +621,7 @@ export default function App() {
     </div>
   );
 }
+
 
 
 
