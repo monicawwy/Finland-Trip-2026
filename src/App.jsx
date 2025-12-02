@@ -181,7 +181,7 @@ const WeatherWidget = ({ city }) => {
   const isCold = weather?.temperature < 0;
   
   return (
-    <div className={`flex items-center justify-start gap-3 pl-2 pr-3 py-2 rounded-xl shadow-sm border border-white/50 w-[120px] flex-shrink-0 ${isCold ? 'bg-gradient-to-r from-blue-50 to-blue-100' : 'bg-orange-50'}`}>
+    <div className={`flex items-center justify-start gap-2 pl-2 pr-2 py-2 rounded-xl shadow-sm border border-white/50 w-[120px] flex-shrink-0 ${isCold ? 'bg-gradient-to-r from-blue-50 to-blue-100' : 'bg-orange-50'}`}>
       <div className={`p-1.5 rounded-full flex-shrink-0 ${isCold ? 'bg-blue-200 text-blue-600' : 'bg-orange-200 text-orange-600'}`}>
         {weather?.temperature < -5 ? <Snowflake size={18} /> : (weather?.temperature > 10 ? <Sun size={18} /> : <Cloud size={18} />)}
       </div>
@@ -601,6 +601,7 @@ export default function App() {
     </div>
   );
 }
+
 
 
 
