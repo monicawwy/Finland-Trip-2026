@@ -204,7 +204,7 @@ const WeatherWidget = ({ city }) => {
           
           {/* 溫度：用 Math.round() 取整數 */}
           <div className="font-black text-2xl text-gray-800 leading-none">
-            {weather?.temperature ? Math.round(weather.temperature) : '--'}°
+            {weather?.temperature ? Math.round(weather.temperature) : '--'}°C
           </div>
 
           {/* 風速提示 */}
@@ -621,6 +621,7 @@ export default function App() {
     </div>
   );
 }
+
 
 
 
