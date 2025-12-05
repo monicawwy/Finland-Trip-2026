@@ -943,7 +943,7 @@ export default function App() {
           </div>
         )}
 
-      // 極光分頁
+      {/* 極光分頁 */}
      const AuroraTab = () => (
        <div style={{padding: '20px', paddingBottom: '80px'}}>
          <h2 style={{fontSize: '24px', marginBottom: '20px', color: '#4a5568'}}>🌌 極光攻略</h2>
@@ -952,12 +952,12 @@ export default function App() {
          <div style={{marginBottom: '25px'}}>
            <h3 style={{fontSize: '18px', marginBottom: '12px', color: '#2d3748'}}>📸 拍攝技巧指南</h3>
            <img 
-             src="極光拍攝技巧.jpg" 
+             src="拍攝北極光技巧.jpg" 
              alt="極光拍攝技巧1"
              style={{width: '100%', borderRadius: '12px', marginBottom: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)'}}
            />
            <img 
-             src="極光拍攝技巧1.jpg" 
+             src="拍攝北極光技巧1.jpg" 
              alt="極光拍攝技巧2"
              style={{width: '100%', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)'}}
            />
@@ -987,26 +987,26 @@ export default function App() {
            <div style={{marginBottom: '15px'}}>
             <h4 style={{fontSize: '16px', color: '#4a5568', marginBottom: '8px', fontWeight: '600'}}>基本設定</h4>
              <ul style={{paddingLeft: '20px', lineHeight: '1.8', color: '#4a5568'}}>
-               <li><strong>夜間模式：</strong>自動啟動（iPhone 11或以上），手動調整至最長曝光時間（建議5-30秒）[web:9][web:10]</li>
-               <li><strong>關閉閃光燈：</strong>避免干擾拍攝效果[web:9]</li>
-               <li><strong>對焦：</strong>點擊遠處景物（如山峰、屋頂）鎖定對焦，避免失焦[web:9]</li>
-               <li><strong>曝光補償：</strong>長按螢幕鎖定對焦後，上下滑動調整亮度[web:11]</li>
+               <li><strong>夜間模式：</strong>自動啟動（iPhone 11或以上），手動調整至最長曝光時間（建議5-30秒）</li>
+               <li><strong>關閉閃光燈：</strong>避免干擾拍攝效果</li>
+               <li><strong>對焦：</strong>點擊遠處景物（如山峰、屋頂）鎖定對焦，避免失焦</li>
+               <li><strong>曝光補償：</strong>長按螢幕鎖定對焦後，上下滑動調整亮度</li>
              </ul>
            </div>
 
            <div style={{marginBottom: '15px'}}>
              <h4 style={{fontSize: '16px', color: '#4a5568', marginBottom: '8px', fontWeight: '600'}}>進階技巧</h4>
              <ul style={{paddingLeft: '20px', lineHeight: '1.8', color: '#4a5568'}}>
-               <li><strong>快門速度：</strong>極光很強時用3-5秒，極光較弱時用15-30秒[web:7][web:11]</li>
-               <li><strong>ISO建議：</strong>800-3200之間（避免過高產生噪點）[web:5][web:7]</li>
-               <li><strong>保存設定：</strong>設定→相機→保留設定，開啟「夜間模式」和「曝光調整」[web:17]</li>
-               <li><strong>RAW格式：</strong>使用ProRAW拍攝（如支援），後期調整空間更大[web:10]</li>
+               <li><strong>快門速度：</strong>極光很強時用3-5秒，極光較弱時用15-30秒</li>
+               <li><strong>ISO建議：</strong>800-3200之間（避免過高產生噪點）</li>
+               <li><strong>保存設定：</strong>設定→相機→保留設定，開啟「夜間模式」和「曝光調整」</li>
+               <li><strong>RAW格式：</strong>使用ProRAW拍攝（如支援），後期調整空間更大</li>
              </ul>
            </div>
 
           <div style={{background: '#fff3cd', padding: '12px', borderRadius: '8px', marginTop: '12px'}}>
              <p style={{fontSize: '14px', color: '#856404', margin: 0}}>
-               <strong>⚠️ 重要提醒：</strong>必須使用腳架保持穩定！將手機螢幕亮度調到最低，避免影響夜視能力[web:9][web:13]
+               <strong>⚠️ 重要提醒：</strong>必須使用腳架保持穩定！將手機螢幕亮度調到最低，避免影響夜視能力
              </p>
            </div>
          </div>
@@ -1018,9 +1018,9 @@ export default function App() {
              如果你嘅iPhone無夜間模式，或想更精細控制設定，可以下載：
            </p>
            <ul style={{paddingLeft: '20px', marginTop: '8px', color: '#4a5568', lineHeight: '1.8'}}>
-             <li><strong>NightCap Camera</strong> - 有專門天文模式[web:14]</li>
-             <li><strong>Slow Shutter Cam</strong> - 可手動設定15-20秒快門[web:14]</li>
-             <li><strong>ProCam</strong> - 完整手動控制[web:11]</li>
+             <li><strong>NightCap Camera</strong> - 有專門天文模式</li>
+             <li><strong>Slow Shutter Cam</strong> - 可手動設定15-20秒快門</li>
+             <li><strong>ProCam</strong> - 完整手動控制</li>
            </ul>
          </div>
        </div>
@@ -1122,4 +1122,5 @@ export default function App() {
     </div>
   );
 }
+
 
