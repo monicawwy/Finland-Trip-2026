@@ -462,8 +462,27 @@ export default function App() {
 
   const totalExpense = expenses.reduce((acc, curr) => acc + curr.cost, 0);
 
+// 用於將原本的 tripData 上傳到 Firebase (只需按一次)
+   const uploadDataToFirebase = async () => {
+     try {
+       await setDoc(doc(db, "trips", "main_trip"), {
+         days: tripData // 這裡用你原本那個好長的 tripData 變數
+       });
+       alert("上傳成功！現在可以刪除這個按鈕了");
+     } catch (error) {
+       console.error("上傳失敗", error);
+       alert("上傳失敗");
+  }
+};
+
   return (
     <div className="max-w-md mx-auto min-h-screen bg-[#FFF5F7] pb-28 font-sans">
+
+   {/* 刪除或註解以下三行，因為資料庫已初始化成功 */}
+      {<button onClick={uploadDataToFirebase} className="bg-red-500 text-white p-2">
+        初始化資料庫 (只按一次)
+      </button>
+      
       {/* Header */}
       <header className="sticky top-0 z-50 bg-white/85 backdrop-blur-md px-6 py-4 rounded-b-[2rem] shadow-sm border-b border-pink-100 flex justify-between items-center">
         <div>
@@ -639,6 +658,7 @@ export default function App() {
     </div>
   );
 }
+
 
 
 
