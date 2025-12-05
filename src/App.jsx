@@ -1029,7 +1029,7 @@ export default function App() {
            </ul>
          </div>
        </div>
-     );
+     )}
       
         {/* --- TAB 4: 記帳 (Budget) --- */}
         {tab === 'budget' && (
@@ -1127,6 +1127,7 @@ export default function App() {
     </div>
   );
 }
+
 
 
 
