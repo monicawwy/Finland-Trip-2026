@@ -479,7 +479,7 @@ export default function App() {
     <div className="max-w-md mx-auto min-h-screen bg-[#FFF5F7] pb-28 font-sans">
 
    {/* 刪除或註解以下三行，因為資料庫已初始化成功 */}
-      {<button onClick={uploadDataToFirebase} className="bg-red-500 text-white p-2">
+      <button onClick={uploadDataToFirebase} className="bg-red-500 text-white p-2">
         初始化資料庫 (只按一次)
       </button>
       
@@ -658,6 +658,7 @@ export default function App() {
     </div>
   );
 }
+
 
 
 
