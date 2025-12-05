@@ -943,7 +943,7 @@ export default function App() {
           </div>
         )}
 
-      {/* 極光分頁 */}
+      // 極光分頁
      const AuroraTab = () => (
        <div style={{padding: '20px', paddingBottom: '80px'}}>
          <h2 style={{fontSize: '24px', marginBottom: '20px', color: '#4a5568'}}>🌌 極光攻略</h2>
@@ -1122,5 +1122,6 @@ export default function App() {
     </div>
   );
 }
+
 
 
