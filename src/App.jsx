@@ -952,12 +952,12 @@ export default function App() {
          <div style={{marginBottom: '25px'}}>
            <h3 style={{fontSize: '18px', marginBottom: '12px', color: '#2d3748'}}>📸 拍攝技巧指南</h3>
            <img 
-             src="Pai-She-Bei-Ji-Guang-Ji-Qiao-1.jpg" 
+             src="極光拍攝技巧.jpg" 
              alt="極光拍攝技巧1"
              style={{width: '100%', borderRadius: '12px', marginBottom: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)'}}
            />
            <img 
-             src="Pai-She-Bei-Ji-Guang-Ji-Qiao.jpg" 
+             src="極光拍攝技巧1.jpg" 
              alt="極光拍攝技巧2"
              style={{width: '100%', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)'}}
            />
@@ -1122,3 +1122,4 @@ export default function App() {
     </div>
   );
 }
+
