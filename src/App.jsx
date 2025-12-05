@@ -667,7 +667,9 @@ const DayCard = ({ day, dayIndex, fullData }) => {
           <div className="pt-4 border-t border-pink-100">
             <h4 className="text-md font-bold text-gray-700 mb-3 ml-2">今日行程 ({day.events.length} 項活動)</h4>
             <div className="space-y-3">
-             {day.events.map((act, i) => (
+             {day.events
+             .filter(act => act.type !== 'aurora') // 加上呢一行去過濾
+             .map((act, i) => (
              <ActivityCard 
              key={`${i}-${act.title}`}  
              act={act} 
@@ -1122,6 +1124,7 @@ export default function App() {
     </div>
   );
 }
+
 
 
 
