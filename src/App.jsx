@@ -334,53 +334,290 @@ const HighlightText = ({ text }) => {
   );
 };
 
-const ActivityCard = ({ act }) => {
-  let Icon = MapPin;
-  let style = "border-l-4 border-gray-300 bg-white";
-  
-  if (act.type === 'flight') { Icon = Plane; style = "border-l-4 border-blue-400 bg-blue-50"; }
-  if (act.type === 'food') { Icon = Utensils; style = "border-l-4 border-orange-400 bg-orange-50"; }
-  if (act.type === 'hotel') { Icon = Home; style = "border-l-4 border-purple-400 bg-purple-50"; }
-  if (act.type === 'aurora') { Icon = Snowflake; style = "border-l-4 border-teal-400 bg-teal-50 shadow-md shadow-teal-100/50"; }
-  if (act.type === 'activity' || act.type === 'sight') { Icon = Camera; style = "border-l-4 border-pink-400 bg-pink-50"; }
-  if (act.type === 'transport') { Icon = Train; style = "border-l-4 border-green-400 bg-green-50"; }
+// ✅ 終極版 ActivityCard (請完整替換)
+const ActivityCard = ({ act, dayIndex, eventIndex, fullData }) => {
+  // 狀態管理
+  const [isEditing, setIsEditing] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [editData, setEditData] = useState({ ...act });
 
-  const handleNav = () => {
-    const query = act.nav || act.title; // 用 act.nav 優先
-    if (query) {
-      window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`, '_blank');
+  // 1. 處理儲存文字修改
+  const handleSave = async () => {
+    try {
+      const newDays = JSON.parse(JSON.stringify(fullData));
+      newDays[dayIndex].events[eventIndex] = editData;
+      await updateDoc(doc(db, "trips", "main_trip"), { days: newDays });
+      setIsEditing(false); // 關閉編輯模式
+    } catch (e) {
+      alert("儲存失敗: " + e.message);
     }
   };
 
- return (
-    <div className={`p-4 mb-3 rounded-2xl shadow-sm ${style} relative transition-all active:scale-[0.98]`}>
-      <div className="flex justify-between items-start mb-1">
-        <div className="flex items-center gap-2">
-          <span className="bg-white/90 px-2 py-0.5 rounded-md text-xs font-black text-gray-500 shadow-sm font-mono">{act.time}</span>
-          <Icon size={16} className="text-gray-600 opacity-70" />
+  // 2. 處理檔案上傳
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setIsUploading(true);
+    try {
+      const storageRef = ref(storage, `files/${Date.now()}_${file.name}`);
+      await uploadBytes(storageRef, file);
+      const url = await getDownloadURL(storageRef);
+      setEditData(prev => ({ ...prev, doc: url }));
+    } catch (error) {
+      alert("上傳失敗");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  // 3. 處理移動順序
+  const handleMove = async (direction) => {
+    // 1. 先用 Firebase 最新的資料 (Snapshot) 確保資料是最新的
+    // 這裡我們無法直接調用 Firebase 獲取最新，只能依賴 props 傳進來的 fullData
+    // 但為了解決閉包問題，我們用 JSON parse/stringify 確保切斷引用
+    
+    const newIndex = eventIndex + direction;
+    const currentDayEvents = fullData[dayIndex].events;
+
+    if (newIndex < 0 || newIndex >= currentDayEvents.length) return;
+
+    try {
+      // ✅ 1. 深層複製
+      const newDays = JSON.parse(JSON.stringify(fullData));
+      
+      const dayEvents = newDays[dayIndex].events;
+
+      // ✅ 2. 打印出來檢查 (Debug)
+      console.log("交換前:", dayEvents[eventIndex].title, "<->", dayEvents[newIndex].title);
+
+      // ✅ 3. 交換 (Swap) - 使用解構賦值，更安全
+      [dayEvents[eventIndex], dayEvents[newIndex]] = [dayEvents[newIndex], dayEvents[eventIndex]];
+
+      // ✅ 4. 打印出來檢查
+      console.log("交換後:", dayEvents[eventIndex].title, "<->", dayEvents[newIndex].title);
+
+      // ✅ 5. 寫入 Firebase
+      await updateDoc(doc(db, "trips", "main_trip"), {
+        days: newDays
+      });
+      
+      // ✨ 關鍵修復：這裡我們不手動修改 React State，
+      // 而是讓 Firebase 的 onSnapshot 自動觸發重新渲染。
+      
+    } catch (e) {
+      console.error("移動失敗", e);
+      alert("移動失敗: " + e.message);
+    }
+  };
+
+  // 4. 刪除活動功能
+  const handleDelete = async () => {
+    if (!window.confirm("確定要永久刪除呢個活動嗎？")) return;
+    try {
+      const newDays = JSON.parse(JSON.stringify(fullData));
+      newDays[dayIndex].events.splice(eventIndex, 1);
+      await updateDoc(doc(db, "trips", "main_trip"), { days: newDays });
+      alert("活動已刪除");
+    } catch (e) {
+      console.error("刪除失敗", e);
+    }
+  };
+
+  // --- 樣式設定 (不變) ---
+  let Icon = MapPin;
+  let style = "border-l-4 border-gray-300 bg-white"; // 預設灰色
+
+  if (act.type === 'flight') { Icon = Plane; style = "border-l-4 border-blue-400 bg-blue-50"; }
+  if (act.type === 'food') { Icon = Utensils; style = "border-l-4 border-orange-400 bg-orange-50"; }
+  if (act.type === 'stay') { Icon = Home; style = "border-l-4 border-purple-400 bg-purple-50"; }
+  if (act.type === 'transport') { Icon = Train; style = "border-l-4 border-green-400 bg-green-50"; }
+  if (act.type === 'activity' || act.type === 'sight' || act.type === 'shop') { Icon = Camera; style = "border-l-4 border-pink-400 bg-pink-50"; }
+  if (act.type === 'aurora') { Icon = Snowflake; style = "border-l-4 border-teal-400 bg-teal-50 shadow-md shadow-teal-100/50"; }
+
+  return (
+    <div className={`p-4 mb-3 rounded-2xl shadow-sm ${style} relative`}>
+      {/* 編輯按鈕 (右上角) */}
+      <button onClick={() => setIsEditing(!isEditing)} className="absolute top-2 right-2 text-gray-400 hover:text-pink-500">
+        <Pencil size={14} />
+      </button>
+
+      {isEditing ? (
+        // === ✨ 全功能編輯模式 (更新版) ✨ ===
+        <div className="space-y-3 animate-fadeIn">
+          <div className="text-xs font-bold text-gray-400 flex justify-between items-center">
+            <span>編輯活動</span>
+            <span className="text-[10px] bg-gray-100 px-1 rounded">Mode: Editing</span>
+          </div>
+
+          {/* 第一行：時間、類型、標題 */}
+          <div className="flex gap-2">
+            <input 
+              className="w-1/3 p-2 rounded border text-sm focus:outline-pink-400 transition-colors" 
+              value={editData.time} 
+              onChange={e => setEditData({...editData, time: e.target.value})} 
+              placeholder="時間"
+            />
+            <select 
+              className="w-2/3 p-2 rounded border text-sm bg-white focus:outline-pink-400" 
+              value={editData.type} 
+              onChange={e => setEditData({...editData, type: e.target.value})}
+            >
+              <option value="sight">📸 景點</option>
+              <option value="food">🍴 餐廳</option>
+              <option value="shop">🛍️ 購物</option>
+              <option value="transport">🚆 交通</option>
+              <option value="stay">🏨 住宿</option>
+              <option value="activity">🎢 活動</option>
+            </select>
+          </div>
+          
+          <input 
+            placeholder="活動標題" 
+            className="w-full p-2 rounded border text-sm font-bold focus:outline-pink-400" 
+            value={editData.title} 
+            onChange={e => setEditData({...editData, title: e.target.value})} 
+          />
+          
+          {/* --- ✨ 新增：Highlight (亮點/提示) --- */}
+          <input 
+            placeholder="✨ 亮點 / 提示 (例如: 必食 / 需預約)" 
+            className="w-full p-2 rounded border text-sm text-red-500 placeholder-red-200 focus:outline-red-300 bg-red-50/30" 
+            value={editData.highlight || ''} // 防止 undefined
+            onChange={e => setEditData({...editData, highlight: e.target.value})} 
+          />
+
+          {/* 描述 */}
+          <textarea 
+            placeholder="詳細描述" 
+            className="w-full p-2 rounded border text-sm h-20 focus:outline-pink-400" 
+            value={editData.desc} 
+            onChange={e => setEditData({...editData, desc: e.target.value})} 
+          />
+
+          {/* --- ✨ 更新：導航地址 (加 Icon) --- */}
+          <div className="relative">
+            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-400">
+              <MapPin size={14} />
+            </div>
+            <input 
+              placeholder="Google Map 地址 / 座標" 
+              className="w-full p-2 pl-9 rounded border text-sm bg-blue-50 focus:outline-blue-400 text-blue-800 placeholder-blue-300" 
+              value={editData.nav || ''} 
+              onChange={e => setEditData({...editData, nav: e.target.value})} 
+            />
+          </div>
+
+          {/* 檔案上傳 */}
+          <div className="flex items-center gap-2 bg-gray-50 p-2 rounded border border-dashed">
+            <label className="bg-white border px-2 py-1 rounded cursor-pointer text-xs font-bold flex items-center gap-1">
+              {isUploading ? <Loader2 className="animate-spin" size={12}/> : <Plus size={12}/>} 上傳文件
+              <input type="file" className="hidden" onChange={handleFileUpload} disabled={isUploading}/>
+            </label>
+            {editData.doc && <span className="text-[10px] text-green-600 truncate max-w-[150px]">已連結文件</span>}
+          </div>
+
+          {/* 移動順序按鈕 */}
+          <div className="flex gap-2">
+             <button onClick={() => handleMove(-1)} disabled={eventIndex === 0} className="flex-1 py-2 bg-blue-50 text-blue-600 rounded-lg text-xs font-bold border border-blue-100 hover:bg-blue-100 disabled:opacity-50">⬆️ 上移</button>
+             <button onClick={() => handleMove(1)} disabled={eventIndex === fullData[dayIndex].events.length - 1} className="flex-1 py-2 bg-blue-50 text-blue-600 rounded-lg text-xs font-bold border border-blue-100 hover:bg-blue-100 disabled:opacity-50">⬇️ 下移</button>
+          </div>
+
+          {/* 儲存 & 刪除按鈕 */}
+          <div className="flex gap-2 pt-2">
+            <button onClick={handleDelete} className="w-1/3 py-1.5 bg-red-100 text-red-600 rounded-lg text-xs font-bold">刪除</button>
+            <button onClick={handleSave} className="w-2/3 py-1.5 bg-green-500 text-white rounded-lg text-sm font-bold shadow-md">儲存變更</button>
+          </div>
         </div>
-        {act.nav && ( 
-          <button onClick={handleNav} className="flex items-center gap-1 bg-blue-500 text-white px-2.5 py-1 rounded-full text-[10px] font-bold shadow hover:bg-blue-600">
-            <Navigation size={10} /> GO
-          </button>
-        )}
-      </div>
-      <h4 className="font-bold text-gray-800 text-lg leading-tight mb-1">{act.title}</h4>
-      <p className="text-sm text-gray-600 leading-relaxed">
-        <HighlightText text={act.desc} />
-      </p>
+      ) : (
+        // === 顯示模式 (不變) ===
+        <>
+          <div className="flex justify-between items-start mb-1">
+            <div className="flex items-center gap-2">
+              <span className="bg-white/90 px-2 py-0.5 rounded-md text-xs font-black text-gray-500 font-mono">{act.time}</span>
+              <Icon size={16} className="text-gray-600 opacity-70" />
+            </div>
+            <div className="flex gap-1 mr-6">
+               {act.doc && <a href={act.doc} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 bg-yellow-400 text-yellow-900 px-2 py-1 rounded-full text-[10px] font-bold shadow">📄 文件</a>}
+               {act.nav && <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(act.nav)}`} target="_blank" rel="noreferrer" className="flex items-center gap-1 bg-blue-500 text-white px-2.5 py-1 rounded-full text-[10px] font-bold shadow">🚀 GO</a>}
+            </div>
+          </div>
+          <h4 className="font-bold text-gray-800 text-lg leading-tight mb-1">{act.title}</h4>
+          <p className="text-sm text-gray-600 leading-relaxed"><HighlightText text={act.desc} /></p>
+          {(act.highlight || act.tips) && <div className="mt-2 text-[11px] text-gray-500 bg-white/70 p-1.5 rounded-lg border"> {act.highlight && <span className="mr-2 text-red-500 font-bold">★ {act.highlight}</span>} {act.tips && <span>💡 {act.tips}</span>}</div>}
+        </>
+      )}
     </div>
   );
 };
 
 // --- 4. 每天行程卡片 (新增組件) ---
-const DayCard = ({ day }) => {
+const DayCard = ({ day, dayIndex, fullData }) => {
   // 1. 使用 State 追蹤卡片是否展開
   const [isExpanded, setIsExpanded] = useState(false);
 
-  // 2. 處理點擊事件：切換 isExpanded 的狀態
-  const toggleExpand = () => {
-    setIsExpanded(!isExpanded);
+ // --- ✨ 新增：新增活動表單的狀態 ---
+  const [isAdding, setIsAdding] = useState(false); // 控制表單開關
+  const [newEvent, setNewEvent] = useState({
+    time: "",
+    title: "",
+    type: "sight", // 預設類型
+    desc: "",
+    nav: ""
+  });
+
+  const toggleExpand = () => setIsExpanded(!isExpanded);
+
+// *** 新增：行程刪除/修改功能 ***
+    const deleteEvent = async (eventIndexToDelete) => {
+        if (!window.confirm("確定要刪除這項行程嗎？此操作不可逆！")) return;
+
+        // 1. 複製目前的完整行程資料
+        const newDays = [...fullData];
+
+        // 2. 在記憶體中，從這一天 (dayIndex) 的 events 陣列中刪除指定的活動 (eventIndexToDelete)
+        newDays[dayIndex].events.splice(eventIndexToDelete, 1);
+
+        // 3. 將整個新的行程陣列寫回 Firebase (使用 setDoc，因為它是最簡單和安全的)
+        try {
+            // trips 是集合名稱，main_trip 是文件名稱
+            await setDoc(doc(db, "trips", "main_trip"), {
+                days: newDays
+            });
+            alert("行程刪除成功！");
+        } catch (error) {
+            console.error("刪除失敗", error);
+            alert("刪除失敗。");
+        }
+    };
+
+ // --- ✨ 新增：處理新增活動 ---
+  const handleAddEvent = async () => {
+    if (!newEvent.title || !newEvent.time) {
+      alert("請最少填寫時間和標題！");
+      return;
+    }
+
+    try {
+      // 1. 複製現有的行程資料
+      const newDays = [...fullData];
+      
+      // 2. 將新活動加到當天 (dayIndex) 的 events 陣列最後面
+      newDays[dayIndex].events.push(newEvent);
+
+      // 3. 寫入 Firebase
+      await updateDoc(doc(db, "trips", "main_trip"), {
+        days: newDays
+      });
+
+      // 4. 重置表單
+      setIsAdding(false);
+      setNewEvent({ time: "", title: "", type: "sight", desc: "", nav: "" });
+      alert("活動新增成功！");
+      
+    } catch (e) {
+      console.error("新增失敗", e);
+      alert("新增失敗: " + e.message);
+    }
   };
 
   return (
@@ -389,21 +626,21 @@ const DayCard = ({ day }) => {
       
       {/* 卡片頭部 (永遠顯示) - 點擊區域 */}
       <div 
-        className={`p-3 min-h-[110px] cursor-pointer flex justify-between items-center transition-colors ${isExpanded ? 'bg-pink-100/50' : 'hover:bg-pink-50'}`}
+        className={`p-3 min-h-[120px] cursor-pointer flex justify-between items-center transition-colors ${isExpanded ? 'bg-pink-100/50' : 'hover:bg-pink-50'}`}
         onClick={toggleExpand}
       >
-        <div className="flex items-start gap-4">
-          <div className="text-center min-w-[70px]">
+        <div className="flex items-start gap-4 flex-grow min-w-0">
+          <div className="text-center min-w-[70px] flex-shrink-0">
             {/* 核心資訊：Day 1 */}
             <div className="text-3xl font-black text-gray-800 font-mono tracking-tighter">Day {day.day}</div>
             {/* 核心資訊：日期 */}
             <div className="text-sm font-bold text-pink-500">{day.date}</div>
           </div>
           
-          <div className="w-[140px]"> {/* 限制標題闊度 */}
-            {/* 核心資訊：行程標題 */}
+          <div className="w-[140px]"> {/* 鎖死闊度 */}
+            {/* 核心資訊：行程標題 - 加入 line-clamp-3 以限制夾住 3 行 */}
             <h3 className="text-lg font-black text-gray-800 leading-tight line-clamp-3">{day.title}</h3>
-            {/* 核心資訊：城市 */}
+            {/* ... 城市資訊 ... */}
             <p className="text-sm text-gray-500 flex items-center gap-1 mt-1">
                 <MapPin size={14} className="text-pink-400"/>
                 {day.city}
@@ -430,10 +667,95 @@ const DayCard = ({ day }) => {
           <div className="pt-4 border-t border-pink-100">
             <h4 className="text-md font-bold text-gray-700 mb-3 ml-2">今日行程 ({day.events.length} 項活動)</h4>
             <div className="space-y-3">
-              {day.events.map((act, i) => (
-                <ActivityCard key={i} act={act} />
-              ))}
+             {day.events.map((act, i) => (
+             <ActivityCard 
+             key={`${i}-${act.title}`}  
+             act={act} 
+             dayIndex={dayIndex}        // 傳入：這是第幾天
+             eventIndex={i}             // 傳入：這是當天的第幾個活動 (i 就是 eventIndex)
+             fullData={fullData}        // 傳入：完整的行程資料 (用於儲存時更新)
+             />
+            ))}
+           </div>
+
+       {/* --- ✨ 新增：新增活動按鈕與表單 --- */}
+        <div className="mt-4 border-t border-dashed border-pink-200 pt-4">
+          {!isAdding ? (
+            <button 
+              onClick={() => setIsAdding(true)}
+              className="w-full py-2 bg-pink-50 text-pink-500 rounded-xl border border-pink-200 font-bold text-sm hover:bg-pink-100 flex justify-center items-center gap-2 transition-all"
+            >
+              <Plus size={16} /> 新增行程
+            </button>
+          ) : (
+            <div className="bg-gray-50 p-3 rounded-xl border border-gray-200 animate-fadeIn">
+              <h5 className="font-bold text-gray-500 mb-2 text-xs">填寫新活動資料</h5>
+              
+              <div className="space-y-2">
+                {/* 第一行：時間 + 類型 */}
+                <div className="flex gap-2">
+                  <input 
+                    placeholder="時間 (e.g. 14:00)" 
+                    className="w-1/3 p-2 rounded border text-sm"
+                    value={newEvent.time}
+                    onChange={e => setNewEvent({...newEvent, time: e.target.value})}
+                  />
+                  <select 
+                    className="w-2/3 p-2 rounded border text-sm bg-white"
+                    value={newEvent.type}
+                    onChange={e => setNewEvent({...newEvent, type: e.target.value})}
+                  >
+                    <option value="sight">📸 景點 (Sight)</option>
+                    <option value="food">🍴 餐廳 (Food)</option>
+                    <option value="shop">🛍️ 購物 (Shop)</option>
+                    <option value="transport">🚆 交通 (Transport)</option>
+                    <option value="stay">🏨 住宿 (Stay)</option>
+                  </select>
+                </div>
+
+                {/* 第二行：標題 */}
+                <input 
+                  placeholder="活動標題 (e.g. 食海鮮)" 
+                  className="w-full p-2 rounded border text-sm font-bold"
+                  value={newEvent.title}
+                  onChange={e => setNewEvent({...newEvent, title: e.target.value})}
+                />
+
+                {/* 第三行：描述 */}
+                <textarea 
+                  placeholder="詳細描述 / 備註 / 價錢..." 
+                  className="w-full p-2 rounded border text-sm h-16"
+                  value={newEvent.desc}
+                  onChange={e => setNewEvent({...newEvent, desc: e.target.value})}
+                />
+
+                 {/* 第四行：導航地址 (Google Maps) */}
+                 <input 
+                  placeholder="導航地址 (選填)" 
+                  className="w-full p-2 rounded border text-sm bg-blue-50"
+                  value={newEvent.nav}
+                  onChange={e => setNewEvent({...newEvent, nav: e.target.value})}
+                />
+
+                {/* 按鈕區 */}
+                <div className="flex gap-2 pt-2">
+                  <button 
+                    onClick={() => setIsAdding(false)}
+                    className="flex-1 py-1.5 bg-gray-200 text-gray-600 rounded-lg text-xs font-bold"
+                  >
+                    取消
+                  </button>
+                  <button 
+                    onClick={handleAddEvent}
+                    className="flex-1 py-1.5 bg-pink-500 text-white rounded-lg text-xs font-bold shadow-md"
+                  >
+                    確認新增
+                  </button>
+                </div>
+              </div>
             </div>
+          )}
+        </div>            
           </div>
         )}
       </div>
@@ -447,22 +769,58 @@ export default function App() {
   const [expenses, setExpenses] = useState([]);
   const [newExpName, setNewExpName] = useState('');
   const [newExpCost, setNewExpCost] = useState('');
+  const [firebaseTripData, setFirebaseTripData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const addExpense = () => {
-    if (newExpName && newExpCost) {
-      setExpenses([...expenses, { id: Date.now(), name: newExpName, cost: parseFloat(newExpCost) }]);
+      // *** 2. 新增：App 啟動時開始監聽 Firebase (Trips) ***
+  useEffect(() => {
+    const unsubscribe = onSnapshot(doc(db, "trips", "main_trip"), (docSnapshot) => {
+      if (docSnapshot.exists()) {
+        setFirebaseTripData(docSnapshot.data().days);
+      }
+      setLoading(false);
+    });
+    return () => unsubscribe(); 
+  }, []);
+
+  // *** 3. 新增：監聽 Firebase (Expenses) ***
+  useEffect(() => {
+    const q = query(collection(db, "expenses"), orderBy("createdAt", "desc"));
+    
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const newExpenses = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setExpenses(newExpenses);
+    });
+
+    return () => unsubscribe();
+  }, []);
+  
+  // *** 新增：Loading 畫面處理 (防止資料未到就運行) ***
+  if (loading) return <div className="p-10 text-center text-gray-500 font-bold">載入行程中，請稍候...</div>;
+
+  const addExpense = async () => {
+  if (newExpName && newExpCost) {
+    try {
+      // 🔥 寫入 Firebase
+      await addDoc(collection(db, "expenses"), {
+        name: newExpName,
+        cost: parseFloat(newExpCost),
+        createdAt: Date.now() // 加個時間印，方便排序
+      });
+      
+      // 清空輸入框
       setNewExpName('');
       setNewExpCost('');
+    } catch (e) {
+      alert("記帳失敗: " + e.message);
     }
-  };
+  }
+};
 
-  const deleteExpense = (id) => {
-    setExpenses(expenses.filter(e => e.id !== id));
-  };
-
-  const totalExpense = expenses.reduce((acc, curr) => acc + curr.cost, 0);
-
-// 用於將原本的 tripData 上傳到 Firebase (只需按一次)
+  // 用於將原本的 tripData 上傳到 Firebase (只需按一次)
    const uploadDataToFirebase = async () => {
      try {
        await setDoc(doc(db, "trips", "main_trip"), {
@@ -474,14 +832,27 @@ export default function App() {
        alert("上傳失敗");
   }
 };
+  
+  const deleteExpense = async (id) => {
+  if(!window.confirm("確定刪除這筆數？")) return; // 加個確認，費事手殘
+  
+  try {
+    // 🔥 通知 Firebase 刪除該 ID 的文件
+    await deleteDoc(doc(db, "expenses", id));
+  } catch (e) {
+    alert("刪除失敗: " + e.message);
+  }
+};
+
+  const totalExpense = expenses.reduce((acc, curr) => acc + curr.cost, 0);
 
   return (
     <div className="max-w-md mx-auto min-h-screen bg-[#FFF5F7] pb-28 font-sans">
 
-   {/* 刪除或註解以下三行，因為資料庫已初始化成功 */}
-      <button onClick={uploadDataToFirebase} className="bg-red-500 text-white p-2">
+     {/* 刪除或註解以下三行，因為資料庫已初始化成功 */}
+      {/* <button onClick={uploadDataToFirebase} className="bg-red-500 text-white p-2">
         初始化資料庫 (只按一次)
-      </button>
+      </button> */}
       
       {/* Header */}
       <header className="sticky top-0 z-50 bg-white/85 backdrop-blur-md px-6 py-4 rounded-b-[2rem] shadow-sm border-b border-pink-100 flex justify-between items-center">
@@ -498,9 +869,14 @@ export default function App() {
        {/* --- TAB 1: 行程 (Trip) --- */}
         {tab === 'trip' && (
           <div className="space-y-8 animate-fadeIn">
-            {/* **改變在這裡：直接使用新的 DayCard 組件** */}
-            {tripData.map((day) => (
-              <DayCard key={day.day} day={day} />
+            {/* *** 替換資料來源並傳遞編輯用參數 *** */}
+            {firebaseTripData.map((day, dayIndex) => (
+              <DayCard 
+                 key={day.day} 
+                 day={day} 
+                 dayIndex={dayIndex}        // 新增：傳遞當前是第幾天 (從 0 開始)
+                 fullData={firebaseTripData} // 新增：傳遞完整的行程資料
+              />
             ))}
           </div>
         )}
@@ -658,6 +1034,7 @@ export default function App() {
     </div>
   );
 }
+
 
 
 
