@@ -141,10 +141,12 @@ const tripData = [
 
 const infoData = {
   flights: [
-    { date: "2/14", route: "HKG -> HEL", no: "AY100", time: "14:05 抵達" },
-    { date: "2/14", route: "HEL -> RVN", no: "AY537", time: "19:40 起飛" },
-    { date: "2/23", route: "TOS -> HEL", no: "AY442", time: "18:45 起飛" },
-    { date: "2/24", route: "HEL -> HKG", no: "AY099", time: "16:35 起飛" }
+    { date: "2/138 (FRI)", route: "HKG T1 -> PVG T2", no: "HO1292", time: "20:35-23:05" },
+    { date: "2/14 (SAT)", route: "PVG T2 -> HEL", no: "HO1607", time: "08:40-12:55" },
+    { date: "2/14 (SAT)", route: "HEL -> RVN", no: "AY0537", time: "19:40-21:05" },
+    { date: "2/23 (MON)", route: "TOS -> HEL", no: "AY0946", time: "18:45-21:35" },
+    { date: "2/24 (TUE)", route: "HEL -> PVG T2", no: "HO1608", time: "16:40-07:40" },
+    { date: "2/25 (WED)", route: "PVG T2 -> HKG", no: "HO1291", time: "16:40-19:35" }
   ],
   hotels: [
     { name: "Arctic Resort Delight", city: "Rovaniemi", nights: "3晚", note: "3房, 已付" },
@@ -1128,6 +1130,7 @@ export default function App() {
     </div>
   );
 }
+
 
 
 
