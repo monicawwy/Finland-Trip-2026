@@ -141,7 +141,7 @@ const tripData = [
 
 const infoData = {
   flights: [
-    { date: "2/138 (FRI)", route: "HKG T1 -> PVG T2", no: "HO1292", time: "20:35-23:05" },
+    { date: "2/13 (FRI)", route: "HKG T1 -> PVG T2", no: "HO1292", time: "20:35-23:05" },
     { date: "2/14 (SAT)", route: "PVG T2 -> HEL", no: "HO1607", time: "08:40-12:55" },
     { date: "2/14 (SAT)", route: "HEL -> RVN", no: "AY0537", time: "19:40-21:05" },
     { date: "2/23 (MON)", route: "TOS -> HEL", no: "AY0946", time: "18:45-21:35" },
@@ -899,7 +899,7 @@ export default function App() {
                   <div key={i} className="flex justify-between items-center">
                     <div>
                       <div className="font-black text-gray-700">{f.route}</div>
-                      <div className="text-xs text-gray-400">{f.date}</div>
+                      <div className="text-xs text-gray-500">{f.date}</div>
                     </div>
                     <div className="text-right">
                       <div className="bg-blue-100 text-blue-600 text-xs font-bold px-2 py-0.5 rounded">{f.no}</div>
@@ -1130,6 +1130,7 @@ export default function App() {
     </div>
   );
 }
+
 
 
 
