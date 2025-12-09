@@ -149,14 +149,14 @@ const infoData = {
     { date: "2/25 (WED)", route: "PVG T2 -> HKG", no: "HO1291", time: "16:40-19:35" }
   ],
   hotels: [
-    { name: "上海三甲港绿地铂派酒店", city: "Shanghai", nights: "2/13, 1晚", note: "航空公司免費安排" },
-    { name: "Arctic Resort Delight", city: "Rovaniemi", nights: "2/14-2/16, 3晚", note: "3房, 已付" },
-    { name: "Holiday Village Inari", city: "Inari", nights: "2/17-2/19, 3晚", note: "Sauna Studio/ Panorama Cabin, 已付" },
-    { name: "Scandic Hotel", city: "Kirkenes", nights: "2/20, 1晚", note: "已付" },
-    { name: "Havila Voyages", city: "Cruise", nights: "2/21, 1晚", note: "郵輪過夜, 已付" },
-    { name: "Thon Hotel Polar", city: "Tromsø", nights: "2/22, 1晚", note: "已付" },
-    { name: "Scandic Airport", city: "Helsinki", nights: "2/23, 1晚", note: "機場旁" },
-    { name: "上海三甲港绿地铂派酒店", city: "Shanghai", nights: "2/24, 1晚", note: "航空公司免費安排" },
+    { name: "上海三甲港绿地铂派酒店", city: "Shanghai", nights: "1晚", note: "航空公司免費安排" },
+    { name: "Arctic Resort Delight", city: "Rovaniemi", nights: "3晚", note: "3房, 已付" },
+    { name: "Holiday Village Inari", city: "Inari", nights: "3晚", note: "Sauna Studio/ Panorama Cabin, 已付" },
+    { name: "Scandic Hotel", city: "Kirkenes", nights: "1晚", note: "已付" },
+    { name: "Havila Voyages", city: "Cruise", nights: "1晚", note: "郵輪過夜, 已付" },
+    { name: "Thon Hotel Polar", city: "Tromsø", nights: "1晚", note: "已付" },
+    { name: "Scandic Airport", city: "Helsinki", nights: "1晚", note: "機場旁" },
+    { name: "上海三甲港绿地铂派酒店", city: "Shanghai", nights: "1晚", note: "航空公司免費安排" },
   ]
 };
 
@@ -1132,6 +1132,7 @@ export default function App() {
     </div>
   );
 }
+
 
 
 
